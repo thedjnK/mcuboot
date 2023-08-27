@@ -21,6 +21,15 @@
 
 BOOT_LOG_MODULE_DECLARE(mcuboot);
 
+int bs_peruser_system_specific_external(const struct nmgr_hdr *hdr, const char *buffer,
+                               int len, zcbor_state_t *cs);
+
+__weak int bs_peruser_system_specific_external(const struct nmgr_hdr *hdr, const char *buffer,
+                               int len, zcbor_state_t *cs)
+{
+    return MGMT_ERR_ENOTSUP;
+}
+
 #ifdef CONFIG_BOOT_MGMT_CUSTOM_STORAGE_ERASE
 static int bs_custom_storage_erase(zcbor_state_t *cs)
 {
@@ -154,6 +163,10 @@ int bs_peruser_system_specific(const struct nmgr_hdr *hdr, const char *buffer,
             }
 #endif
         }
+    }
+
+    if (mgmt_rc == MGMT_ERR_ENOTSUP) {
+        mgmt_rc = bs_peruser_system_specific_external(hdr, buffer, len, cs);
     }
 
     if (mgmt_rc == MGMT_ERR_ENOTSUP) {
