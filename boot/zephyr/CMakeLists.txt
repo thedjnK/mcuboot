@@ -258,7 +258,11 @@ elseif(CONFIG_BOOT_SIGNATURE_TYPE_ED25519 OR CONFIG_BOOT_ENCRYPT_X25519)
       zephyr_sources(${MBEDTLS_ASN1_DIR}/src/asn1parse.c)
     endif()
 
-    zephyr_sources(${BOOT_DIR}/bootutil/src/ed25519_psa.c)
+    if(CONFIG_BOOT_SIGNATURE_USING_KMU)
+      zephyr_sources(${BOOT_DIR}/bootutil/src/ed25519_psa_kmu.c)
+    else()
+      zephyr_sources(${BOOT_DIR}/bootutil/src/ed25519_psa.c)
+    endif()
   endif()
 endif()
 
@@ -543,6 +547,10 @@ endif()
 
 if(CONFIG_MULTIPLE_EXECUTABLE_RAM_REGIONS_DEFAULT_FILE)
   zephyr_sources(ram_load.c)
+endif()
+
+if(CONFIG_MCUBOOT_NRF_CLEANUP_PERIPHERAL)
+  zephyr_sources(nrf_cleanup.c)
 endif()
 
 if(SYSBUILD)
