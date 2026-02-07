@@ -9,8 +9,6 @@ mainmenu "MCUboot configuration"
 
 comment "MCUboot-specific configuration options"
 
-source "$(ZEPHYR_NRF_MODULE_DIR)/modules/mcuboot/boot/zephyr/Kconfig"
-
 # Hidden option to mark a project as MCUboot
 config MCUBOOT
 	default y
@@ -456,14 +454,6 @@ config BOOT_SIGNATURE_KMU_SLOTS
 
 endif
 
-config NCS_BOOT_SIGNATURE_KMU_BASE_SLOT
-	int
-	depends on BOOT_SIGNATURE_USING_KMU
-	default 226 if MCUBOOT_MCUBOOT_IMAGE_NUMBER != -1
-	default 242
-	help
-	  Base key identifier for KMU.
-
 if !BOOT_SIGNATURE_USING_KMU
 
 config BOOT_SIGNATURE_KEY_FILE
@@ -511,6 +501,11 @@ config MCUBOOT_CLEANUP_RAM
 	depends on CPU_CORTEX_M4 || CPU_CORTEX_M33
 	help
 	  Sets contents of memory to 0 before jumping to application.
+
+config MCUBOOT_NRF_CLEANUP_PERIPHERAL
+	bool "Perform nRF peripheral cleanup before chain-load the application"
+	depends on SOC_FAMILY_NORDIC_NRF
+	default y
 
 config NCS_MCUBOOT_DISABLE_SELF_RWX_SUPPORTED
 	bool

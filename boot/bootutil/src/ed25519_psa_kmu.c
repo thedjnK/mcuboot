@@ -27,7 +27,7 @@ BOOT_LOG_MODULE_DECLARE(ed25519_psa);
 /* List of KMU stored key ids available for MCUboot */
 #define PSA_KEY_INDEX_SIZE 2
 
-#define PSA_KEY_STARTING_ID CONFIG_NCS_BOOT_SIGNATURE_KMU_BASE_SLOT
+#define PSA_KEY_STARTING_ID 242
 
 #define MAKE_PSA_KMU_KEY_ID(id) PSA_KEY_HANDLE_FROM_CRACEN_KMU_SLOT(CRACEN_KMU_KEY_USAGE_SCHEME_RAW, id)
 static psa_key_id_t key_ids[] =  {
